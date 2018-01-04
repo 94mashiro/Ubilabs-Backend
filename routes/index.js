@@ -80,6 +80,13 @@ exports = module.exports = function (app) {
 	app.get('/api/activity', routes.api['activity']['get-activity'])
 	app.post('/api/activity', middleware.checkAuth, routes.api['activity']['post-activity'])
 
+// codelabs
+	app.post('/api/codelabs', middleware.checkAuth, routes.api['codelab']['post-codelab'])
+	app.get('/api/codelabs', routes.api['codelab']['get-codelab'])
+
+	// project
+	app.post('/api/project', middleware.checkAuth, routes.api['project']['post-project'])
+
 // system
 	app.post('/api/system/postPicture', middleware.checkAuth, routes.api['system']['post-picture'])	
 

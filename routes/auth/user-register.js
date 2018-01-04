@@ -70,7 +70,7 @@ exports = module.exports = function (req, res) {
 					skip_confirmation: true
 				})
 			}
-			fetch(`http://localhost:${process.env.GITLAB_PORT}/api/v4/users/`, options)
+			fetch(`${process.env.GITLAB_API_HOST}/users/`, options)
 				.then((res) => {
 					return res.json()
 				}).then((json) => {

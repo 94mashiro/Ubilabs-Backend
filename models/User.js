@@ -15,6 +15,7 @@ User.add({
 	description: { type: Types.Textarea, initial: true },
 	gitlabId: { type: Types.Text, initial: false },
 	gitlabToken: { type: Types.Text, initial: false },
+	gitlabSSHKey: { type: Types.Textarea },
 	createdAt: { type: Types.Datetime, default: Date.now }
 }, 'Permissions', {
 	isAdmin: { type: Boolean, label: 'Can access Keystone', index: true },
