@@ -5,10 +5,10 @@ const async = require('async')
 
 exports = module.exports = function (req, res) {
 	const {query: urlQuery} = req
-	const onSuccess = (projects) => {
+	const onSuccess = (result) => {
 		return res.apiResponse({
 			success: true,
-			projects
+			result
 		})
 	}
 
@@ -26,7 +26,11 @@ exports = module.exports = function (req, res) {
 		})
 			.populate([
 				{
-					path: 'author',
+					path: 'leader',
+					select: 'name email description avatar'
+				},
+				{
+					path: 'member',
 					select: 'name email description avatar'
 				},
 				{
@@ -38,14 +42,9 @@ exports = module.exports = function (req, res) {
 			.sort('-createdAt')
 		query.exec((err, paginate) => {
 			if (err) {
-				onError({
-					message: err
-				})
+				onError(err)
 			} else {
-				return res.apiResponse({
-					success: true,
-					projects: paginate.results
-				})
+				return onSuccess(paginate.results)
 			}
 		})
 	}
@@ -62,20 +61,19 @@ exports = module.exports = function (req, res) {
 				{
 					path: 'member',
 					select: 'name email description avatar'
+				},
+				{
+					path: 'node',
+					select: 'name description'
 				}
 			])
 			.lean()
 			.sort('-createdAt')
 			query.exec((err, project) => {
 				if (err) {
-					onError({
-						message: err
-					})
+					onError(err)
 				} else {
-					return res.apiResponse({
-						success: true,
-						project
-					})
+					onSuccess(project)
 				}
 			})
 	}

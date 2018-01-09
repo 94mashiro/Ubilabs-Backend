@@ -86,6 +86,7 @@ exports = module.exports = function (app) {
 
 	// project
 	app.post('/api/project', middleware.checkAuth, routes.api['project']['post-project'])
+	app.get('/api/project', routes.api['project']['get-project'])
 
 // system
 	app.post('/api/system/postPicture', middleware.checkAuth, routes.api['system']['post-picture'])	

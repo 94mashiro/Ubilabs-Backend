@@ -55,7 +55,7 @@ exports = module.exports = async (req, res) => {
 	try {
 		const projectModel = await project.save()
 		const { id, ssh_url_to_repo } = await createGitlabProject(projectModel)
-		projectModel.gitId = id
+		projectModel.gitId = id	
 		projectModel.gitSSH = ssh_url_to_repo
 		await projectModel.save()
 		onSuccess(projectModel)
