@@ -13,7 +13,7 @@ User.add({
 	password: { type: Types.Password, initial: true, required: true },
 	avatar: { type: Types.Url, initial: false },
 	description: { type: Types.Textarea, initial: true },
-	gitlabId: { type: Types.Text, initial: false },
+	gitlabId: { type: Types.Number, initial: false },
 	gitlabToken: { type: Types.Text, initial: false },
 	gitlabSSHKey: { type: Types.Textarea },
 	createdAt: { type: Types.Datetime, default: Date.now }

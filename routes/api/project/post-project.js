@@ -22,14 +22,13 @@ exports = module.exports = async (req, res) => {
 					description
 				})
 			}
-			console.log('fetch')
 			return fetch(`${process.env.GITLAB_API_HOST}/projects/`, options).then(res => {
 				return res.json()
 			}).catch(err => {
 				throw new Error(err)
 			})
 		} catch (err) {
-			 throw new Error(err)
+			throw new Error(err)
 		}
 	}
 
@@ -50,7 +49,7 @@ exports = module.exports = async (req, res) => {
 	const { body } = req
 		const project = Project.model({
 			...body,
-			leader: req.user._id
+			leader: req.user.id
 		})
 	try {
 		const projectModel = await project.save()
