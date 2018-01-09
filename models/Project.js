@@ -19,7 +19,7 @@ Project.add({
 	imageUrls: { type: Types.TextArray },
 	codelab: { type: Types.Relationship, ref: 'Codelab' },
 	story: { type: Types.Markdown },
-	gitId: { type: Types.Number },
+	gitId: { type: Types.Text },
 	gitSSH: { type: Types.Textarea }
 })
 

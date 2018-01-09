@@ -59,7 +59,6 @@ exports = module.exports = function (app) {
 
 	// user
 	app.get('/api/user/checkSession', middleware.checkAuth, routes.api['user']['check-session'])
-	app.get('/api/user/profile', routes.api['user']['get-profile'])
 	app.patch('/api/user/updatePassword', middleware.checkAuth, routes.api['user']['update-password'])
 	app.patch('/api/user/updateProfile', middleware.checkAuth, routes.api['user']['update-profile'])
 
@@ -88,7 +87,6 @@ exports = module.exports = function (app) {
 	// project
 	app.post('/api/project', middleware.checkAuth, routes.api['project']['post-project'])
 	app.get('/api/project', routes.api['project']['get-project'])
-	app.post('/api/project/member', middleware.checkAuth, routes.api['project']['post-member'])
 
 // system
 	app.post('/api/system/postPicture', middleware.checkAuth, routes.api['system']['post-picture'])	
