@@ -2,36 +2,43 @@ const keystone = require('keystone')
 const Article = keystone.list('Article')
 const async = require('async')
 
-exports = module.exports = function (req, res) {
-	const results = []
-	const onSuccess = (articles) => {
+exports = module.exports = async function (req, res) {
+	const { query: urlQuery } = req
+	const onSuccess = (result) => {
 		return res.apiResponse({
 			success: true,
-			articles
+			result
 		})
 	}
 
 	const onError = (err) => {
 		return res.apiResponse({
 			success: false,
-			message: (err && err.message ? err.message : false) || 'Sorry, there was an issue, please try again.'
+			message: err
 		})
 	}
 
-	const query = Article.paginate({
-		page: req.query.page || 1,
-		perPage: 10
-	})
-		.populate('author', 'name email description avatar')
-		.lean()
-		.sort('-createdAt')
-	query.exec((err, paginate) => {
-		if (err) {
-			onError({
-				message: err
-			})
+	try {
+		if (urlQuery.user_id) {
+			const results = await Article.model.find().where('author', urlQuery.user_id).populate('author', 'name email description avatar').lean().sort('-createdAt').exec()
+			onSuccess(results)
 		} else {
-			onSuccess(paginate.results)
+			const query = Article.paginate({
+				page: urlQuery.page || 1,
+				perPage: 10
+			})
+				.populate('author', 'name email description avatar')
+				.sort('-createdAt')
+				.lean()
+			query.exec((err, paginate) => {
+				if (err) {
+					throw err
+				} else {
+					onSuccess(paginate.results)
+				}
+			})
 		}
-	})
+	} catch (err) {
+		onError(err.message)
+	}
 }
