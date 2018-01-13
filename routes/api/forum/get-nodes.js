@@ -2,10 +2,10 @@ const keystone = require('keystone')
 const Node = keystone.list('Node')
 
 exports = module.exports = function (req, res) {
-	const onSuccess = (nodes) => {
+	const onSuccess = (result) => {
 		return res.apiResponse({
 			success: true,
-			nodes
+			result
 		})
 	}
 

@@ -18,6 +18,7 @@ Project.add({
 	member: { type: Types.Relationship, ref: 'User', many: true },
 	imageUrls: { type: Types.TextArray },
 	codelab: { type: Types.Relationship, ref: 'Codelab' },
+	isFinished: { type: Types.Boolean },
 	story: { type: Types.Markdown },
 	gitId: { type: Types.Number },
 	gitSSH: { type: Types.Textarea }

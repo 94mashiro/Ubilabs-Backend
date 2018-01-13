@@ -1,7 +1,7 @@
 const keystone = require('keystone')
 const ProjectNote = keystone.list('ProjectNote')
 
-exports = module.exports = (req, res) => {
+exports = module.exports = async (req, res) => {
 	const { query: urlQuery } = req
 	const onSuccess = (result) => {
 		return res.apiResponse({
@@ -19,7 +19,23 @@ exports = module.exports = (req, res) => {
 
 	try {
 		if (!urlQuery.project_id) {
-			throw '请输入参数 project_id。'
+			try {
+				const query = ProjectNote.model.find()
+					.populate([
+						{
+							path: 'author',
+							select: 'name email description avatar'
+						},
+						'article'
+					])
+					.lean()
+					.sort('-createdAt')
+				const result = await query.exec()
+				onSuccess(result)
+			} catch (err) {
+				onError(err.message || err)
+			}
+			
 		} else {
 			const query = ProjectNote.paginate({
 				page: urlQuery.page || 1,

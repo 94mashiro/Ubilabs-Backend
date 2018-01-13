@@ -55,7 +55,7 @@ exports = module.exports = function (app) {
 	app.get('/auth/logout', routes.auth['user-logout'])
 
 	// apis
-	app.all('/api*', [keystone.middleware.api, keystone.middleware.cors, middleware.mockTime]);
+	app.all('/api*', [keystone.middleware.api, keystone.middleware.cors]);
 
 	// user
 	app.get('/api/user/checkSession', middleware.checkAuth, routes.api['user']['check-session'])
@@ -86,11 +86,15 @@ exports = module.exports = function (app) {
 	app.get('/api/codelabs', routes.api['codelab']['get-codelab'])
 
 	// project
-	app.post('/api/project', middleware.checkAuth, routes.api['project']['post-project'])
 	app.get('/api/project', routes.api['project']['get-project'])
+	app.get('/api/project/note', routes.api['project']['get-projectnote'])
+	app.get('/api/project/milestone', routes.api['project']['get-milestone'])
+	app.post('/api/project', middleware.checkAuth, routes.api['project']['post-project'])	
 	app.post('/api/project/member', middleware.checkAuth, routes.api['project']['post-member'])
 	app.post('/api/project/note', middleware.checkAuth, routes.api['project']['post-projectnote'])
-	app.get('/api/project/note', routes.api['project']['get-projectnote'])
+	app.post('/api/project/milestone', middleware.checkAuth, routes.api['project']['post-milestone'])
+	app.patch('/api/project', middleware.checkAuth, routes.api['project']['update-project'])
+	app.delete('/api/project/member', middleware.checkAuth, routes.api['project']['delete-member'])
 
 // system
 	app.post('/api/system/postPicture', middleware.checkAuth, routes.api['system']['post-picture'])	
