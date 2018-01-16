@@ -7,10 +7,10 @@ exports = module.exports = function (req, res) {
 	let results = []
 	const { query: urlQuery } = req
 	let query
-	const onSuccess = (questions) => {
+	const onSuccess = (result) => {
 		return res.apiResponse({
 			success: true,
-			questions
+			result
 		})
 	}
 
@@ -31,6 +31,28 @@ exports = module.exports = function (req, res) {
 				}
 			})
 			.where('node', urlQuery.node_id)
+			.populate([
+				{
+					path: 'author',
+					selected: 'name email description avatar'
+				},
+				{
+					path: 'node',
+					selected: 'name description'
+				}
+			])
+			.lean()
+			.sort('-createdAt')
+	} else if (urlQuery.user_id) {
+		query = Question
+			.paginate({
+				page: req.query.page || 1,
+				perPage: 10,
+				filters: {
+					author: urlQuery.user_id
+				}
+			})
+			.where('author', urlQuery.user_id)
 			.populate([
 				{
 					path: 'author',
@@ -65,7 +87,6 @@ exports = module.exports = function (req, res) {
 
 	try {
 		query.exec(async (err, paginate) => {
-			console.log(paginate.total)
 			if (err) {
 				throw err
 			} else {

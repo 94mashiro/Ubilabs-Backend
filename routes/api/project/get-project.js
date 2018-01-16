@@ -52,7 +52,13 @@ exports = module.exports = function (req, res) {
 	const queryProjectsByUserId = async (userId) => {
 		const query = Project.paginate({
 			page: req.query.page || 1,
-			perPage: 10
+			perPage: 10,
+			filters: {
+				$or: [
+					{ 'leader': userId },
+					{ 'member': userId }
+				]
+			}
 		}).or([
 			{ 'leader': userId },
 			{ 'member': userId }
@@ -73,6 +79,11 @@ exports = module.exports = function (req, res) {
 			.lean()
 			.sort('-createdAt')
 		query.exec((err, paginate) => {
+			if (paginate.total) {
+				for (let project of paginate.results) {
+					project.url = `/project/${project._id}`
+				}
+			}
 			onSuccess(paginate)
 		})
 

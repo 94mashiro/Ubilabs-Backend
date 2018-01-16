@@ -32,6 +32,11 @@ exports = module.exports = async function (req, res) {
 						if (err) {
 							throw err
 						} else {
+							if (paginate.total) {
+								for (let article of paginate.results) {
+									article.url = `/forum/article/${article._id}`
+								}
+							}
 							onSuccess(paginate)
 						}
 					})
