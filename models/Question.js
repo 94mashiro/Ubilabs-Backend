@@ -12,7 +12,8 @@ var Question = new keystone.List('Question', {
 Question.add({
 	title: { type: Types.Text, index: true, initial: true },
 	node: { type: Types.Relationship, ref: 'Node', initial: true },
-	author: { type: Types.Relationship, ref: 'User'},	
+	author: { type: Types.Relationship, ref: 'User' },	
+	answer: { type: Types.Relationship, ref: 'Answer', many: true },
 	content: { type: Types.Markdown }
 })
 

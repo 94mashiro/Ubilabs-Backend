@@ -35,25 +35,30 @@ exports = module.exports = function (req, res) {
 				let counter = 0;
 				const forPromise = () => {
 					return new Promise((resolve, reject) => {
-						for (let idx in answers) {
-							Comment.model.find().where('answer', answers[idx]._id).exec((err, comments) => {
-								if (err) {
-									console.log('err')
-									reject(err)
-								} else {
-									answers[idx]['comments'] = comments.length
-									counter++
-									if (counter === answers.length) {
-										resolve(answers)
+						if (answers.length === 0) {
+							resolve(answers)
+						} else {
+							for (let idx in answers) {
+								Comment.model.find().where('answer', answers[idx]._id).exec((err, comments) => {
+									if (err) {
+										console.log('err')
+										reject(err)
+									} else {
+										answers[idx]['comments'] = comments.length
+										counter++
+										if (counter === answers.length) {
+											resolve(answers)
+										}
 									}
-								}
-							})
+								})
+							}
 						}
 					})
 				}
 				forPromise().then(answers => {
 					onSuccess(answers)
 				}).catch(err => {
+					console.log(err)
 					onError(err)
 				})
 			}

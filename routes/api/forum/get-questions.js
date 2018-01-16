@@ -17,7 +17,7 @@ exports = module.exports = function (req, res) {
 	const onError = (err) => {
 		return res.apiResponse({
 			success: false,
-			message: (err && err.message ? err.message : false) || 'Sorry, there was an issue, please try again.'
+			message: err.message || err
 		})
 	}
 
@@ -25,7 +25,10 @@ exports = module.exports = function (req, res) {
 		query = Question
 			.paginate({
 				page: req.query.page || 1,
-				perPage: 5
+				perPage: 5,
+				filters: {
+					node: urlQuery.node_id
+				}
 			})
 			.where('node', urlQuery.node_id)
 			.populate([
@@ -38,6 +41,7 @@ exports = module.exports = function (req, res) {
 					selected: 'name description'
 				}
 			])
+			.lean()
 			.sort('-createdAt')
 	} else {
 		query = Question
@@ -55,45 +59,63 @@ exports = module.exports = function (req, res) {
 					select: 'name description _id'
 				}
 			])
+			.lean()
 			.sort('-createdAt')
 	}
 
-	query.exec((err, paginate) => {
-		if (err) {
-			onError({
-				message: `Sorry, there was an error processing your information, please try again.`
-			})
-		} else {
-			results = paginate.results
-			let counter = 0;
-			const forPromise = () => {
-				return new Promise((resolve, reject) => {
-					if (results.length !== 0) {
-						for (i in results) {
-							Answer.model.find().where('question', results[i]).exec((err, ans) => {
-								counter++
-								if (err) {
-									reject(err)
-								} else {
-									results[i]._doc.answers = ans.length
-									results[i]._doc.url = `/forum/question/${results[i]._id}`
-								}
-								if (counter === results.length) {
-									resolve(results)
-								}
-							})
-						}
-					} else {
-						resolve(results)
+	try {
+		query.exec(async (err, paginate) => {
+			console.log(paginate.total)
+			if (err) {
+				throw err
+			} else {
+				if (paginate.total > 0) {
+					for (let question of paginate.results) {
+						console.log(question)
+						question.url = `/forum/question/${question._id}`
 					}
-				})
+				}
+				onSuccess(paginate)
 			}
-			forPromise().then((results) => {
-				onSuccess(results)
-			}).catch((err) => {
-				onError(err)
-			})
-		}
-	})
+		})
+	} catch (err) {
+		onError(err.message || err)
+	}
+
+	// query.exec((err, paginate) => {
+	// 	if (err) {
+	// 		onError(err)
+	// 	} else {
+	// 		results = paginate.results
+	// 		let counter = 0;
+	// 		const forPromise = () => {
+	// 			return new Promise((resolve, reject) => {
+	// 				if (results.length !== 0) {
+	// 					for (i in results) {
+	// 						Answer.model.find().where('question', results[i]).exec((err, ans) => {
+	// 							counter++
+	// 							if (err) {
+	// 								reject(err)
+	// 							} else {
+	// 								results[i]._doc.answers = ans.length
+	// 								results[i]._doc.url = `/forum/question/${results[i]._id}`
+	// 							}
+	// 							if (counter === results.length) {
+	// 								resolve(results)
+	// 							}
+	// 						})
+	// 					}
+	// 				} else {
+	// 					resolve(results)
+	// 				}
+	// 			})
+	// 		}
+	// 		forPromise().then((results) => {
+	// 			onSuccess(results)
+	// 		}).catch((err) => {
+	// 			onError(err)
+	// 		})
+	// 	}
+	// })
 
 }

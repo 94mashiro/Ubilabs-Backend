@@ -1,5 +1,6 @@
 var keystone = require('keystone');
 const Answer = keystone.list('Answer')
+const Question = keystone.list('Question')
 
 exports = module.exports = (req, res) => {
 	const { body } = req
@@ -24,10 +25,13 @@ exports = module.exports = (req, res) => {
 		author: req.user.id
 	})
 
-	answer.save((err, answer) => {
+	answer.save(async (err, answer) => {
 		if (err) {
 			onError(err)
 		} else {
+			const questionModel = await Question.model.findOne().where('_id', body.question).exec()
+			questionModel.answer.push(answer)
+			await questionModel.save()
 			onSuccess(answer)
 		}
 	})

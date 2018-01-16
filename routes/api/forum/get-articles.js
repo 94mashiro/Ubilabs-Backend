@@ -18,11 +18,41 @@ exports = module.exports = async function (req, res) {
 		})
 	}
 
-	try {
-		if (urlQuery.user_id) {
-			const results = await Article.model.find().where('author', urlQuery.user_id).populate('author', 'name email description avatar').lean().sort('-createdAt').exec()
-			onSuccess(results)
-		} else {
+	const queryArticlesByUserId = async (userId, paginate) => {
+		try {
+			if (paginate) {
+				const query = Article.paginate({
+					page: urlQuery.page || 1,
+					perPage: 10
+				}).where('author', userId)
+					.populate('author', 'name email description avatar')
+					.lean()
+					.sort('-createdAt')
+					.exec((err, paginate) => {
+						if (err) {
+							throw err
+						} else {
+							onSuccess(paginate)
+						}
+					})
+			} else {
+				const results = await Article
+					.model
+					.find()
+					.where('author', userId)
+					.populate('author', 'name email description avatar')
+					.lean()
+					.sort('-createdAt')
+					.exec()
+				onSuccess(results)
+			}
+		} catch (err) {
+			onError(err.message || err)
+		}
+	}
+
+	const queryArticles = () => {
+		try {
 			const query = Article.paginate({
 				page: urlQuery.page || 1,
 				perPage: 10
@@ -34,11 +64,19 @@ exports = module.exports = async function (req, res) {
 				if (err) {
 					throw err
 				} else {
-					onSuccess(paginate.results)
+					onSuccess(paginate)
 				}
 			})
+		} catch (err) {
+			onError(err.message || err)
 		}
-	} catch (err) {
-		onError(err.message)
 	}
+
+	if (urlQuery.user_id) {
+		queryArticlesByUserId(urlQuery.user_id, urlQuery.paginate)
+	} else {
+		queryArticles()
+	}
+
+
 }

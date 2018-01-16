@@ -49,6 +49,35 @@ exports = module.exports = function (req, res) {
 		})
 	}
 
+	const queryProjectsByUserId = async (userId) => {
+		const query = Project.paginate({
+			page: req.query.page || 1,
+			perPage: 10
+		}).or([
+			{ 'leader': userId },
+			{ 'member': userId }
+		]).populate([
+			{
+				path: 'leader',
+				select: 'name email description avatar'
+			},
+			{
+				path: 'member',
+				select: 'name email description avatar'
+			},
+			{
+				path: 'node',
+				select: 'name description'
+			}
+			])
+			.lean()
+			.sort('-createdAt')
+		query.exec((err, paginate) => {
+			onSuccess(paginate)
+		})
+
+	}
+
 	const queryProject = (projectId) => {
 		const query = Project.model
 			.findOne()	
@@ -78,10 +107,17 @@ exports = module.exports = function (req, res) {
 			})
 	}
 
-	if (!urlQuery.id) {
-		queryProjects()
-	} else {
+	// if (!urlQuery.id) {
+	// 	queryProjects()
+	// } else {
+	// 	queryProject(urlQuery.id)
+	// }
+	if (urlQuery.id) {
 		queryProject(urlQuery.id)
+	} else if (urlQuery.user_id) {
+		queryProjectsByUserId(urlQuery.user_id)
+	} else {
+		queryProjects()
 	}
 
 }
