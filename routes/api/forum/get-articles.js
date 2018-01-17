@@ -23,8 +23,12 @@ exports = module.exports = async function (req, res) {
 			if (paginate) {
 				const query = Article.paginate({
 					page: urlQuery.page || 1,
-					perPage: 10
-				}).where('author', userId)
+					perPage: 10,
+					filters: {
+						author: userId
+					}
+				})
+					.where('author', userId)
 					.populate('author', 'name email description avatar')
 					.lean()
 					.sort('-createdAt')
