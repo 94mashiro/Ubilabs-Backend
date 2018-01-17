@@ -94,6 +94,7 @@ exports = module.exports = function (app) {
 	app.post('/api/project/note', middleware.checkAuth, routes.api['project']['post-projectnote'])
 	app.post('/api/project/milestone', middleware.checkAuth, routes.api['project']['post-milestone'])
 	app.patch('/api/project', middleware.checkAuth, routes.api['project']['update-project'])
+	app.patch('/api/project/milestone', middleware.checkAuth, routes.api['project']['update-milestone'])
 	app.delete('/api/project/member', middleware.checkAuth, routes.api['project']['delete-member'])
 	app.delete('/api/project/milestone', middleware.checkAuth, routes.api['project']['delete-milestone'])
 	app.delete('/api/project/note', middleware.checkAuth, routes.api['project']['delete-note'])
