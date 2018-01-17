@@ -85,7 +85,7 @@ exports = module.exports = function (app) {
 	app.post('/api/codelabs', middleware.checkAuth, routes.api['codelab']['post-codelab'])
 	app.get('/api/codelabs', routes.api['codelab']['get-codelab'])
 
-	// project
+// project
 	app.get('/api/project', routes.api['project']['get-project'])
 	app.get('/api/project/note', routes.api['project']['get-projectnote'])
 	app.get('/api/project/milestone', routes.api['project']['get-milestone'])
@@ -98,6 +98,12 @@ exports = module.exports = function (app) {
 	app.delete('/api/project/member', middleware.checkAuth, routes.api['project']['delete-member'])
 	app.delete('/api/project/milestone', middleware.checkAuth, routes.api['project']['delete-milestone'])
 	app.delete('/api/project/note', middleware.checkAuth, routes.api['project']['delete-note'])
+
+// follow
+	app.get('/api/follow', routes.api['follow']['get-follow'])
+	app.get('/api/follow/rss', routes.api['follow']['get-rsslist'])
+	app.post('/api/follow', middleware.checkAuth, routes.api['follow']['post-follow'])
+	app.delete('/api/follow', middleware.checkAuth, routes.api['follow']['delete-follow'])	
 // system
 	// app.post('/api/system/postPicture', middleware.checkAuth, routes.api['system']['post-picture'])
 };
