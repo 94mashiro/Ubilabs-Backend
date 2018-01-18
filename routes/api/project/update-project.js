@@ -19,7 +19,6 @@ exports = module.exports = (req, res) => {
 
 	try {
 		Project.model.findOne().where('_id', body._id).exec((err, project) => {
-			console.log(project)
 			if (err) {
 				throw err
 			} else {

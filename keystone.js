@@ -51,6 +51,8 @@ keystone.set('nav', {
 	users: 'users',
 });
 
+keystone.set('logger', ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"')
+
 // Start Keystone to connect to your database and initialise the web server
 
 

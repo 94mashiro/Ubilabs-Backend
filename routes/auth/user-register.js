@@ -55,7 +55,6 @@ exports = module.exports = function (req, res) {
 				gitlabId: '',
 				gitlabToken: ''
 			}
-			console.log(process.env.GITLAB_TOKEN)
 			const options = {
 				method: 'POST',
 				headers: {

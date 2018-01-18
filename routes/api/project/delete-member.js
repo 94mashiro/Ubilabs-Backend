@@ -48,9 +48,7 @@ exports = module.exports = async (req, res) => {
 			} else {
 				const memberModel = await User.model.findOne().where('_id', query.memberId).exec()
 				const leaderModel = await User.model.findOne().where('_id', req.user._id).exec()
-				console.log(projectModel.member)
 				projectModel.member.splice(projectModel.member.indexOf(query.memberId), 1)
-				console.log(projectModel.member)
 				const body = await revokeMemberInGit(projectModel, memberModel, leaderModel)
 				projectModel.save((err, project) => {
 					if (err) {

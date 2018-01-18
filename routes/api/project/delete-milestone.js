@@ -24,7 +24,6 @@ exports = module.exports = async (req, res) => {
 		} else {
 			const milestoneModel = await Milestone.model.findById(query.milestone_id).exec()
 			const projectModel = await Project.model.findById(milestoneModel.project).exec()
-			console.log(req.user._id, projectModel.leader)
 			if (req.user._id != projectModel.leader.toString()) {
 				return res.apiError(403, '你不是该项目的负责人，无权调用该接口。')
 			} else {

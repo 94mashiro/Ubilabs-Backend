@@ -92,7 +92,6 @@ exports = module.exports = function (req, res) {
 			} else {
 				if (paginate.total > 0) {
 					for (let question of paginate.results) {
-						console.log(question)
 						question.url = `/forum/question/${question._id}`
 					}
 				}

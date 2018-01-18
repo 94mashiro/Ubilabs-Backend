@@ -34,13 +34,12 @@ exports = module.exports = async function (req, res) {
 		followingList = followingList.map(follow => {
 			return follow.following
 		})
-		console.log(followingList)
 		if (followingList.length) {
 			const articleList = await Article.model.find().where('author').in(followingList).limit(3).populate('author', 'name').lean().sort('-createdAt').exec()
 			const answerList = await Answer.model.find().where('author').in(followingList).limit(5).populate('author', 'name').populate('question', 'title').lean().sort('-createdAt').exec()
 			const activityList = await Activity.model.find().where('author').in(followingList).limit(2).populate('author', 'name').lean().sort('-createdAt').exec()
 			const projectList = await Project.model.find().where('leader').in(followingList).limit(2).populate('leader', 'name').lean().sort('-createdAt').exec()
-			const commentList = await Comment.model.find().where('author').in(followingList).limit(5).populate('author', 'name').populate('article', 'title').lean().sort('-createdAt').exec()
+			let commentList = await Comment.model.find().where('author').in(followingList).limit(5).populate('author', 'name').populate('article', 'title').lean().sort('-createdAt').exec()
 			const questionList = await Question.model.find().where('author').in(followingList).limit(3).populate('author', 'name').lean().sort('-createdAt').exec()
 			articleList.forEach(article => {
 				article.rssType = 'article'
@@ -54,7 +53,8 @@ exports = module.exports = async function (req, res) {
 			projectList.forEach(project => {
 				project.rssType = 'project'
 			})
-			commentList.filter(comment => comment.article).forEach(comment => {
+			commentList = commentList.filter(comment => comment.article)
+			commentList.forEach(comment => {
 				comment.rssType = 'comment'
 			})
 			questionList.forEach(question => {
