@@ -76,6 +76,8 @@ exports = module.exports = function (app) {
 	app.post('/api/forum/postAnswer', middleware.checkAuth, routes.api['forum']['post-answer'])
 	app.post('/api/forum/comment', middleware.checkAuth, routes.api['forum']['post-comment']),
 	app.patch('/api/forum/answer', middleware.checkAuth, routes.api['forum']['update-answer'])
+	app.patch('/api/forum/question', middleware.checkAuth, routes.api['forum']['update-question'])
+	app.patch('/api/forum/article', middleware.checkAuth, routes.api['forum']['update-article'])
 	
 // activity
 	app.get('/api/activity', routes.api['activity']['get-activity'])
