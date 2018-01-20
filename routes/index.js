@@ -86,6 +86,7 @@ exports = module.exports = function (app) {
 // codelabs
 	app.post('/api/codelabs', middleware.checkAuth, routes.api['codelab']['post-codelab'])
 	app.get('/api/codelabs', routes.api['codelab']['get-codelab'])
+	app.patch('/api/codelabs', middleware.checkAuth, routes.api['codelab']['update-codelab'])
 
 // project
 	app.get('/api/project', routes.api['project']['get-project'])

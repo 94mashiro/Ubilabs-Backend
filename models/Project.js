@@ -21,7 +21,8 @@ Project.add({
 	isFinished: { type: Types.Boolean },
 	story: { type: Types.Markdown },
 	gitId: { type: Types.Number },
-	gitSSH: { type: Types.Textarea }
+	gitSSH: { type: Types.Textarea },
+	codelab: { type: Types.Relationship, ref: 'Codelab', many: true }
 })
 
 Project.defaultColumns = 'title';

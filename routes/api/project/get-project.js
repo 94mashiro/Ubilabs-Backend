@@ -36,7 +36,8 @@ exports = module.exports = function (req, res) {
 				{
 					path: 'node',
 					select: 'name description'
-				}
+				},
+				'codelab'
 			])
 			.lean()
 			.sort('-createdAt')
@@ -74,7 +75,8 @@ exports = module.exports = function (req, res) {
 			{
 				path: 'node',
 				select: 'name description'
-			}
+			},
+			'codelab'
 			])
 			.lean()
 			.sort('-createdAt')
@@ -105,7 +107,8 @@ exports = module.exports = function (req, res) {
 				{
 					path: 'node',
 					select: 'name description'
-				}
+				},
+				'codelab'
 			])
 			.lean()
 			.sort('-createdAt')

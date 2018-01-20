@@ -31,18 +31,4 @@ exports = module.exports = (req, res) => {
 			codelabId: codelab._id
 		})
 	}
-
-	// const codelab = Codelab.model({
-	// 	title,
-	// 	node,
-	// 	// author: req.user._id
-	// })
-
-	// codelab.save((err, codelab) => {
-	// 	if (err) {
-	// 		onError(err)
-	// 	} else {
-	// 		onSuccess(codelab)
-	// 	}
-	// })
 }

@@ -27,8 +27,12 @@ Codelab.add({
 	}
 })
 
-Codelab.schema.post('save', (codelab) => {
-	generate(codelab.file.filename, codelab._id)
+Codelab.schema.post('save', async (codelab) => {
+	try {
+		await generate(codelab.file.filename, codelab._id)
+	} catch (err) {
+		console.log(err)
+	}
 })
 
 Codelab.defaultColumns = 'title|20%, content';
