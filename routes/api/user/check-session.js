@@ -7,10 +7,11 @@ exports = module.exports = async function (req, res) {
 	try {
 		const userData = req.user._doc
 		delete userData['password']
-		const projects = await Project.model.find().where('leader', req.user._id).exec()
+		const leaderProjects = await Project.model.find().where('leader', req.user._id).exec()
+		const joinProjects = await Project.model.find().where('member').in([req.user._id]).exec()
 		const questions = await Question.model.find().where('author', req.user._id).exec()
 		const articles = await Article.model.find().where('author', req.user._id).exec()
-		userData.projectCount = projects.length
+		userData.projectCount = leaderProjects.length + joinProjects.length
 		userData.questionCount = questions.length
 		userData.articleCount = articles.length
 		return res.apiResponse(userData)

@@ -45,7 +45,7 @@ exports = module.exports = function (req, res) {
 			if (err) {
 				onError(err)
 			} else {
-				return onSuccess(paginate.results)
+				return onSuccess(paginate)
 			}
 		})
 	}

@@ -8,7 +8,7 @@ exports = module.exports = function (req, res) {
 	const onSuccess = (result) => {
 		return res.apiResponse({
 			success: true,
-			result
+			result: result
 		})
 	}
 	const onError = (err) => {
@@ -39,7 +39,7 @@ exports = module.exports = function (req, res) {
 			if (err) {
 				onError(err)
 			} else {
-				onSuccess(paginate.results)
+				onSuccess(paginate)
 			}
 		})
 	}
